@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="filtering">
+    <flow SubFlow="false" name="filteringFlow1" type="http://www.mulesoft.org/schema/mule/core/flow" entity-id="4758f6af-8a1d-418e-ba54-b9a34fe08fce">
+        <properties>
+            <property name="initialState"/>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="1"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="8081"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keepAlive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="auxiliary;index" value="2"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="And" type="http://www.mulesoft.org/schema/mule/core/and-filter" entity-id="And#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="auxiliary;index" value="3"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/payload-type-filter;0">
+                        <property name="expectedType" value="org.apache.commons.httpclient.ContentLengthInputStream"/>
+                        <property name="auxiliary;index" value="4"/>
+                        <property name="auxiliary;wrapIn" value="4"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/message-property-filter;1">
+                        <property name="scope" value="inbound"/>
+                        <property name="pattern" value="http.method=post"/>
+                        <property name="caseSensitive" value="false"/>
+                        <property name="auxiliary;index" value="5"/>
+                        <property name="auxiliary;wrapIn" value="5"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <pattern name="JSON to Object" type="http://www.mulesoft.org/schema/mule/json/json-to-object-transformer" entity-id="JSON to Object#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass" value="java.util.HashMap"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mapper-ref"/>
+                    <property name="auxiliary;index" value="6"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+            <pattern name="Custom" type="http://www.mulesoft.org/schema/mule/core/custom-filter" entity-id="Custom#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="class" value="org.mule.examples.filters.FreeMembershipDiscountFilter"/>
+                    <property name="auxiliary;index" value="7"/>
+                </properties>
+            </pattern>
+            <pattern name="Set Payload" type="http://www.mulesoft.org/schema/mule/core/set-payload" entity-id="Set Payload#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="value" value="the discount was granted."/>
+                    <property name="auxiliary;index" value="8"/>
+                </properties>
+            </pattern>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="message" value="#[payload]"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="9"/>
+                </properties>
+            </pattern>
+            <pattern name="HTTP Response Builder" type="http://www.mulesoft.org/schema/mule/http/response-builder" entity-id="HTTP Response Builder#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="cookiesLabel"/>
+                    <property name="status" value="200"/>
+                    <property name="contentType" value="text/plain"/>
+                    <property name="auxiliary;index" value="10"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+</mule-configuration>
